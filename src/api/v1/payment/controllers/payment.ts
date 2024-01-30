@@ -8,10 +8,10 @@
 // const createPaymentIntent = async (req: Request, res: Response) => {
 //     const { price } = req.body;
 //     console.log(price, "this price is from req.body");
-    
+
 //     const amount = parseInt(price) * 100;
 //     console.log(amount, "from inside payment");
-    
+
 //     const paymentIntent = await stripe.paymentIntents.create({
 //         amount: amount,
 //         currency: "usd",
@@ -33,7 +33,7 @@ import { Request, Response } from 'express';
 dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_TOKEN_SECRET as string, {
-  apiVersion: '2023-10-16',
+    apiVersion: '2023-10-16',
 });
 
 const createPaymentIntent = async (req: Request, res: Response) => {
@@ -49,8 +49,10 @@ const createPaymentIntent = async (req: Request, res: Response) => {
             clientSecret: paymentIntent.client_secret,
         });
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        if (error instanceof Error) {
+            res.status(400).send({ error: error.message });
+        }
     }
 }
 
-export default  createPaymentIntent ;
+export default createPaymentIntent;
