@@ -43,22 +43,60 @@ const postAnUser = async (req: Request, res: Response) => {
     }
 }
 
-// const updateUser = async (req: Request, res: Response) => {
-//     try {
-//         const id = req.params?.id;
-//         const filter = {_id: id};
-//         const updatedDoc = {
-//             $set: {
+const updateUser = async (req: Request, res: Response) => {
+    try {
+        const email = req.params?.email;
+        const filter = { email: email };
+        const { price } = req.body;
+        let type;
+        switch (price) {
+            case 10:
+                type = 'basic';
+                break;
+            case 20:
+                type = 'standard';
+                break;
+            case 40:
+                type = 'pro';
+                break;
+            default:
+                res.send({ errror: 'Invalid payment amount' });
+                return;
+        }
+        const updatedDoc = {
+            $set: {
+                type: type
+            }
+        }
+        const result = await UserModel.updateOne(filter, updatedDoc, null);
+        res.send(result);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(401).send({ error: error.message })
+        }
+    }
+}
 
-//             }
-//         }
-//     } catch (error) {
-//         if (error instanceof Error) {
-//             res.status(401).send({ error: error.message })
-//         }
-//     }
-// }
-
+const updateUserInfo = async (req: Request, res: Response) => {
+    try {
+        const email = req.params?.email;
+        const filter = {email: email };
+        const {name, photoURL} = req.body;
+        // console.log(name, photoURL);
+        const updatedDoc = {
+            $set: {
+                name: name,
+                photoURL: photoURL
+            }
+        }
+        const result = await UserModel.updateOne(filter, updatedDoc, null);
+        res.send(result);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(401).send({ error: error.message });
+        }
+    }
+}
 const makeAdmin = async (req: Request, res: Response) => {
     try {
         const id = req.params?.id;
@@ -77,4 +115,4 @@ const makeAdmin = async (req: Request, res: Response) => {
     }
 }
 
-export default { getUsers, getAnUser, postAnUser, makeAdmin };
+export default { getUsers, getAnUser, postAnUser, makeAdmin, updateUser, updateUserInfo };

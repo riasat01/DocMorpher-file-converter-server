@@ -39,7 +39,7 @@ const stripe = new Stripe(process.env.PYMENT_GATEWAY_SK as string, {
 const createPaymentIntent = async (req: Request, res: Response) => {
     try {
         const { price } = req.body;
-        console.log(typeof price);
+        // console.log(typeof price);
         const amount = Math.floor(price * 100);
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount,
