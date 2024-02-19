@@ -1,12 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors"
-
 import dotenv from 'dotenv';
+
 import connectDB from "./db/connectDB";
 import globalErrorHandler from "./utils/globalErrorHandler";
 import applyDefaultMiddleWares from "./middlewares/applyDefaultMiddleWares";
 import paymentRouter from "./routers/payment/index";
-import userRouter from "./routers/users/index"
+import userRouter from "./routers/users/index";
+import JWTRouter from './routers/authentication/index';
+import logOutRouter from './routers/remove-token/index'
 
 import multer from 'multer';
 import pdfParse from 'pdf-parse';
@@ -25,11 +27,12 @@ const port = process.env.PORT || 5000
 const app: Express = express();
 
 applyDefaultMiddleWares(app);
-app.use(cors());
+// app.use(cors());
 
-
+app.use('/jwt', JWTRouter);
 app.use('/create-payment-intent', paymentRouter);
 app.use('/user', userRouter);
+app.use('/logout', logOutRouter);
 
 
 const storage = multer.memoryStorage();
@@ -93,11 +96,14 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const main = async () => {
-    await connectDB()
-    app.listen(port, () => {
-        console.log(`server is running at port ${port}`);
-    })
-}
+// const main = async () => {
+//     await connectDB()
+//     app.listen(port, () => {
+//         console.log(`server is running at port ${port}`);
+//     })
+// }
 
-main();
+// main();
+
+
+export default app;
