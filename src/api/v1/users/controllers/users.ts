@@ -12,10 +12,10 @@ const getUsers = async (req: Request, res: Response) => {
     }
 }
 
-const getAnUser =async (req:Request, res: Response) => {
+const getAnUser = async (req: Request, res: Response) => {
     try {
         const email = req.params?.email;
-        const query = {email: email};
+        const query = { email: email };
         const result = await UserModel.findOne(query);
         res.send(result);
     } catch (error) {
@@ -42,6 +42,22 @@ const postAnUser = async (req: Request, res: Response) => {
         }
     }
 }
+
+// const updateUser = async (req: Request, res: Response) => {
+//     try {
+//         const id = req.params?.id;
+//         const filter = {_id: id};
+//         const updatedDoc = {
+//             $set: {
+
+//             }
+//         }
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             res.status(401).send({ error: error.message })
+//         }
+//     }
+// }
 
 const makeAdmin = async (req: Request, res: Response) => {
     try {
