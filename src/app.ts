@@ -10,12 +10,12 @@ import userRouter from "./routers/users/index";
 import JWTRouter from './routers/authentication/index';
 import logOutRouter from './routers/remove-token/index'
 
-import multer from 'multer';
-import pdfParse from 'pdf-parse';
-import fs from 'fs';
-import Docxtemplater from 'docxtemplater';
-import path from "path";
-import JSZip from 'jszip';
+// import multer from 'multer';
+// import pdfParse from 'pdf-parse';
+// import fs from 'fs';
+// import Docxtemplater from 'docxtemplater';
+// import path from "path";
+// import JSZip from 'jszip';
 
 dotenv.config();
 
@@ -35,46 +35,46 @@ app.use('/user', userRouter);
 app.use('/logout', logOutRouter);
 
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 
-app.post('/convert', upload.single('pdfFile'), async (req: Request, res: Response) => {
-  try {
-    if (!req.file) {
-      throw new HTTPError('No file uploaded');
-    }
+// app.post('/convert', upload.single('pdfFile'), async (req: Request, res: Response) => {
+//   try {
+//     if (!req.file) {
+//       throw new HTTPError('No file uploaded');
+//     }
 
-    // Extract text from the PDF
-    const pdfData = req.file.buffer;
-    console.log('PDF Data:', pdfData);
-    const pdfText = await pdfParse(pdfData);
-    console.log('PDF Text:', pdfText.text);
+    // // Extract text from the PDF
+    // const pdfData = req.file.buffer;
+    // console.log('PDF Data:', pdfData);
+    // const pdfText = await pdfParse(pdfData);
+    // console.log('PDF Text:', pdfText.text);
 
-    // Create a DOCX template
-    const templatePath = path.join(__dirname, 'template.docx');
+    // // Create a DOCX template
+    // const templatePath = path.join(__dirname, 'template.docx');
 
 
-    const template = fs.readFileSync(templatePath, 'utf-8');
+    // const template = fs.readFileSync(templatePath, 'utf-8');
 
     
-    const doc = new Docxtemplater();
-    doc.loadZip(new JSZip(template));
+    // const doc = new Docxtemplater();
+    // doc.loadZip(new JSZip(template));
 
-    // Fill in the template with the PDF text (customize this based on your needs)
-    doc.setData({ content: pdfText.text });
-    doc.render();
+//     // Fill in the template with the PDF text (customize this based on your needs)
+//     doc.setData({ content: pdfText.text });
+//     doc.render();
 
-    // Save the converted DOCX file
-    const convertedBuffer = doc.getZip().generate({ type: 'nodebuffer' });
+//     // Save the converted DOCX file
+//     const convertedBuffer = doc.getZip().generate({ type: 'nodebuffer' });
 
-    // Send the converted DOCX file back to the client
-    res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    res.send(convertedBuffer);
-  } catch (error) {
-    console.error('Error converting PDF to DOC', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+//     // Send the converted DOCX file back to the client
+//     res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+//     res.send(convertedBuffer);
+//   } catch (error) {
+//     console.error('Error converting PDF to DOC', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 
 
 
